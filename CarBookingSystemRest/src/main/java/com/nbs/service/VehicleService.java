@@ -67,15 +67,16 @@ public class VehicleService {
 		 * @param vehicle Vehicle class object
 		 * @return vehicle class updated object
 		 */
-		public Vehicle  updateVehicle(Vehicle vehicle) {
+		public String  updateVehicle(Vehicle vehicle) {
 			Vehicle existingVehicle=repository.findById(vehicle.getId()).get();
 			if(existingVehicle!=null) {
 				existingVehicle.setvName(vehicle.getvName());
 				existingVehicle.setvColor(vehicle.getvColor());
 				existingVehicle.setvNumber(vehicle.getvNumber());
-			return repository.save(existingVehicle);
+				repository.save(existingVehicle);
+				return "Record updated successfully";
 			}
 			else
-				return null;
+				return "Record not found";
 		}
 }

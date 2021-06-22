@@ -65,15 +65,17 @@ public class UserService {
 		return repository.findByEmailAndPassword(emailId, password);
 	}
 
-	public User updateUser(User user) {
+	public String  updateUser(User user) {
 		User existingUser=repository.findById(user.getId()).get();
 		if(existingUser!=null) {
 		existingUser.setName(user.getName());
 		existingUser.setEmail(user.getEmail());
 		existingUser.setPassword(user.getPassword());
-		return repository.save(existingUser);}
+		repository.save(existingUser);
+		return "Record updated";
+		}
 		else
-			return null;
+			return "record not found";
 	}
 
 }
