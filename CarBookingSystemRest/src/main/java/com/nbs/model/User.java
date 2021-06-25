@@ -30,7 +30,7 @@ public class User {
 	private String email;
 	@NotBlank(message = "* please enter password")
 	private String password;
-	private int type;
+	private int type;//
 	@Column(name = "created", columnDefinition = "timestamp default current_timestamp")
 	private Timestamp created;
 	@Temporal(TemporalType.DATE)

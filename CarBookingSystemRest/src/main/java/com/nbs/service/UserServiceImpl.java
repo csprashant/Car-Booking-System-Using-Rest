@@ -11,12 +11,10 @@ import com.nbs.model.User;
 import com.nbs.repository.UserRepository;
 
 @Service
-
-public class UserService {
-
+public class UserServiceImpl implements IUserService {
 	private final UserRepository repository;
-
-	public UserService(UserRepository repository) {
+	
+	public UserServiceImpl(UserRepository repository) {
 		this.repository = repository;
 	}
 
@@ -41,7 +39,7 @@ public class UserService {
 	/**
  	*Returns single User class object
  	*@param userId  A Integer value represents userId 
- */
+    */
 	public User getUserInfo(Integer userId) {
 		User user = repository.findById(userId).get();
 		return user;
@@ -68,14 +66,13 @@ public class UserService {
 	public String  updateUser(User user) {
 		User existingUser=repository.findById(user.getId()).get();
 		if(existingUser!=null) {
-		existingUser.setName(user.getName());
-		existingUser.setEmail(user.getEmail());
-		existingUser.setPassword(user.getPassword());
-		repository.save(existingUser);
-		return "Record updated";
+			existingUser.setName(user.getName());
+			existingUser.setEmail(user.getEmail());
+			existingUser.setPassword(user.getPassword());
+			repository.save(existingUser);
+			return "Record updated";
 		}
 		else
 			return "record not found";
 	}
-
 }

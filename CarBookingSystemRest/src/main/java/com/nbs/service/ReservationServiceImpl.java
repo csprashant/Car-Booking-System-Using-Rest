@@ -5,9 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.nbs.model.Reservation;
 import com.nbs.model.User;
 import com.nbs.model.Vehicle;
@@ -17,12 +15,12 @@ import com.nbs.repository.VehicleRepository;
 import com.nbs.vo.ReservationnVo;
 
 @Service
-public class ReservationService {
+public class ReservationServiceImpl implements  IReservationService {
 	private ReservationRepository repository;
 	private UserRepository userRepository;
 	private VehicleRepository vehicleRepository;
 
-	public ReservationService(ReservationRepository repository, UserRepository userRepository,
+	public ReservationServiceImpl(ReservationRepository repository, UserRepository userRepository,
 			VehicleRepository vehicleRepository) {
 		this.repository = repository;
 		this.userRepository = userRepository;

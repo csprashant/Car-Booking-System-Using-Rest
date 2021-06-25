@@ -12,10 +12,10 @@ import com.nbs.model.Vehicle;
 import com.nbs.repository.VehicleRepository;
 
 @Service
-public class VehicleService {
+public class VehicleServiceImpl implements IVehicleService {
 	private final VehicleRepository repository;
 	
-	public VehicleService(VehicleRepository vehicleRepository) {
+	public VehicleServiceImpl(VehicleRepository vehicleRepository) {
 		this.repository=vehicleRepository;
 	}
 	/**
@@ -26,8 +26,7 @@ public class VehicleService {
 		try{vehilce.setUpdated(new Timestamp(new Date().getTime()));
 		repository.save(vehilce);
 		return "Record saved ";}
-		catch(Exception e)
-		{
+		catch(Exception e){
 			throw new RuntimeException("Internal problem");
 		}
 	}
