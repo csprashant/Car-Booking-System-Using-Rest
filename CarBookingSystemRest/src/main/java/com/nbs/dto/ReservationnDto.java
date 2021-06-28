@@ -1,10 +1,12 @@
-package com.nbs.vo;
+package com.nbs.dto;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
-public class ReservationnVo {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ReservationnDto {
 	
 	private String id;
 	private String userId;
@@ -17,6 +19,5 @@ public class ReservationnVo {
 	private String status;
 	private String created;
 	private String updated;
-	
-	}
+}
 

@@ -14,12 +14,13 @@ import com.nbs.repository.UserRepository;
 public class UserServiceImpl implements IUserService {
 	private final UserRepository repository;
 	
+	
 	public UserServiceImpl(UserRepository repository) {
 		this.repository = repository;
 	}
 	/**
-	 * save a new User class object
-	 * @param user User class object
+	 * save a new UserDto class object
+	 * @param user UserDto class object
 	 */
 	
 	public User saveUser(User user) {
@@ -29,8 +30,8 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	/**
-	 *  Returns all User details
-	 *@return returns List<User> List contains Users 
+	 *  Returns all UserDto details
+	 *@return returns List<UserDto> List contains Users 
 	 */
 	
 	public List<User> getAllUserInfo() {
@@ -39,7 +40,7 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	/**
- 	*Returns single User class object
+ 	*Returns single UserDto class object
  	*@param userId  A Integer value represents userId 
     */
 	
@@ -49,7 +50,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	/**
-	*	Deletes single User
+	*	Deletes single UserDto
 	*@param vehicleId  a Integer value represents userId
 	*/
 	
@@ -62,7 +63,7 @@ public class UserServiceImpl implements IUserService {
 	 * checks the correct user for user name and password
 	 * @param emailId	 email id of the user
 	 * @param password password of the user
-	 * @return	User object if user name and password matched
+	 * @return	UserDto object if user name and password matched
 	 */
 	
 	public User login(String emailId, String password) {

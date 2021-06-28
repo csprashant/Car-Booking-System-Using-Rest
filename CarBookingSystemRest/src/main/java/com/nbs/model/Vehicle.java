@@ -17,22 +17,17 @@ public class Vehicle {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	
-	@NotBlank(message="*Make sure you have not entered Vehicle Name")
 	@Column(name = "vname")
+	@NotBlank(message="*Make sure you have not entered Vehicle Name")
 	private String vName;
-	
-	@NotBlank(message="*Make sure you have not entered Vehicle color")
 	@Column(name = "vcolor")
+	@NotBlank(message="*Make sure you have not entered Vehicle color")
 	private String vColor;
-	
-	@NotBlank(message="*Make sure you have not entered vehicle number")
+	@NotBlank(message="*Make sure you have not entered Vehicle number")
 	@Column(name = "vnumber")
 	private String vNumber;
-	
 	@Column(name = "created", columnDefinition = "timestamp default current_timestamp")
 	private java.sql.Timestamp created;
-	
 	@Temporal(TemporalType.DATE)
 	private Date updated;
 	
@@ -85,7 +80,7 @@ public class Vehicle {
 	}
 	@Override
 	public String toString() {
-		return "Vehicle [id=" + id + ", vName=" + vName + ", vColor=" + vColor + ", vNumber=" + vNumber + ", created="
+		return "VehicleDto [id=" + id + ", vName=" + vName + ", vColor=" + vColor + ", vNumber=" + vNumber + ", created="
 				+ created + ", updated=" + updated + "]";
 	}
 

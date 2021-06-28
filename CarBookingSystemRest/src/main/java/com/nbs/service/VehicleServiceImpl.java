@@ -15,7 +15,7 @@ public class VehicleServiceImpl implements IVehicleService {
 	
 	/**
 	 * save a new vehicle class object  
-	 *@param vehilce  Vehicle class object 
+	 *@param vehilce  VehicleDto class object 
 	 */
 	
 	public String saveVehicle(Vehicle vehilce){
@@ -29,7 +29,7 @@ public class VehicleServiceImpl implements IVehicleService {
 
 	/**
 	 *  Returns all vehicle details
-	 *@return retruns List<Vehicle> List of vehicles 
+	 *@return retruns List<VehicleDto> List of vehicles 
 	 */
 	
 	public List<Vehicle> getAllVehicleInfo() {
@@ -48,7 +48,7 @@ public class VehicleServiceImpl implements IVehicleService {
 	}
 	
 	/**
-		*Deletes single Vehicle
+		*Deletes single VehicleDto
 		*@param vehicleId  a Integer value represents vehicleId 
 	 */
 	
@@ -63,7 +63,7 @@ public class VehicleServiceImpl implements IVehicleService {
 	}
 		/**
 		 * 
-		 * @param vehicle Vehicle class object
+		 * @param vehicle VehicleDto class object
 		 * @return vehicle class updated object
 		 */
 		

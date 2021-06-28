@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.nbs.dto.ReservationnDto;
 import com.nbs.model.User;
 import com.nbs.service.IReservationService;
-import com.nbs.vo.ReservationnVo;
 
 @RestController
 public class ReservationController {
@@ -28,7 +29,7 @@ public class ReservationController {
 	 */
 	
 	@GetMapping("/reservations")
-	public List<ReservationnVo> mapperListReservatinHistory(HttpServletRequest request) {
+	public List<ReservationnDto> mapperListReservatinHistory(HttpServletRequest request) {
 		if (valid(request)) {
 			return reservationService.fetchAllReservationDetails();
 		} else
@@ -36,18 +37,18 @@ public class ReservationController {
 	}
 	/**
 	 * Method to create reservation 
-	 * @param reservationnVo Must provide value for userID,vehiclId,fromDate,todate
+	 * @param reservationnDto Must provide value for userID,vehiclId,fromDate,todate
 	 * @return String
 	 * @throws Exception
 	 */
 	@PostMapping("/reservation")
-	public String handlerCreateReservation(@RequestBody ReservationnVo reservationnVo) throws Exception {
+	public String handlerCreateReservation(@RequestBody ReservationnDto reservationnDto) throws Exception {
 		boolean res;
-		if (new SimpleDateFormat("yyyy-MM-dd").parse(reservationnVo.getFromDate())
-				.compareTo(new SimpleDateFormat("yyyy-MM-dd").parse(reservationnVo.getToDate())) < 0) {
+		if (new SimpleDateFormat("yyyy-MM-dd").parse(reservationnDto.getFromDate())
+				.compareTo(new SimpleDateFormat("yyyy-MM-dd").parse(reservationnDto.getToDate())) < 0) {
 			res = false;
 			try {
-				res = reservationService.bookReservation(reservationnVo);
+				res = reservationService.bookReservation(reservationnDto);
 				res = true;
 				}
 			catch (Exception e) {
