@@ -17,11 +17,11 @@ public class UserServiceImpl implements IUserService {
 	public UserServiceImpl(UserRepository repository) {
 		this.repository = repository;
 	}
-
 	/**
 	 * save a new User class object
 	 * @param user User class object
 	 */
+	
 	public User saveUser(User user) {
 		user.setType(2);
 		user.setUpdated(new Timestamp(new Date().getTime()));
@@ -32,14 +32,17 @@ public class UserServiceImpl implements IUserService {
 	 *  Returns all User details
 	 *@return returns List<User> List contains Users 
 	 */
+	
 	public List<User> getAllUserInfo() {
 		List<User> listUser = (List<User>) repository.findAll();
 		return listUser;
 	}
+	
 	/**
  	*Returns single User class object
  	*@param userId  A Integer value represents userId 
     */
+	
 	public User getUserInfo(Integer userId) {
 		User user = repository.findById(userId).get();
 		return user;
@@ -49,20 +52,23 @@ public class UserServiceImpl implements IUserService {
 	*	Deletes single User
 	*@param vehicleId  a Integer value represents userId
 	*/
+	
 	public String deleteUser(Integer userId) {
 		repository.deleteById(userId);
 		return "Record deleted";
 	}
+	
 	/**
-	 * checks the correct user for username and password
-	 * @param emailId	 emailid of the user
+	 * checks the correct user for user name and password
+	 * @param emailId	 email id of the user
 	 * @param password password of the user
-	 * @return	User object if username and password matched
+	 * @return	User object if user name and password matched
 	 */
+	
 	public User login(String emailId, String password) {
 		return repository.findByEmailAndPassword(emailId, password);
 	}
-
+	
 	public String  updateUser(User user) {
 		User existingUser=repository.findById(user.getId()).get();
 		if(existingUser!=null) {
@@ -74,5 +80,5 @@ public class UserServiceImpl implements IUserService {
 		}
 		else
 			return "record not found";
-	}
+		}
 }

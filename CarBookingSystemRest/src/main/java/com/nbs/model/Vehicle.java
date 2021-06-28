@@ -1,8 +1,6 @@
 package com.nbs.model;
-
 import java.sql.Timestamp;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,27 +9,33 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.hibernate.validator.constraints.NotBlank;
 @Entity
 @Table(name="vehicle")
 public class Vehicle {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
 	@NotBlank(message="*Make sure you have not entered Vehicle Name")
 	@Column(name = "vname")
 	private String vName;
+	
 	@NotBlank(message="*Make sure you have not entered Vehicle color")
 	@Column(name = "vcolor")
 	private String vColor;
+	
 	@NotBlank(message="*Make sure you have not entered vehicle number")
 	@Column(name = "vnumber")
 	private String vNumber;
+	
 	@Column(name = "created", columnDefinition = "timestamp default current_timestamp")
 	private java.sql.Timestamp created;
+	
 	@Temporal(TemporalType.DATE)
 	private Date updated;
+	
 	public Vehicle() {
 		 super();
 		}

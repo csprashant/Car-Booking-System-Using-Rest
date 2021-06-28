@@ -1,8 +1,6 @@
 package com.nbs.model;
-
 import java.sql.Timestamp;
 import java.util.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,34 +14,37 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
-
 @Entity
 @Table(name="reservation")
 public class Reservation {
-	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
 	@ManyToOne(targetEntity = User.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name="userid",referencedColumnName = "id")
-	
 	private  User user;
+	
 	@Column(name="fromdate")
 	private Date fromDate;
+	
 	@Column(name="todate")
 	private Date toDate;
+	
 	@ManyToOne(targetEntity =Vehicle.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name="vehicleid",referencedColumnName = "id")
-
 	private Vehicle vehicle;
+	
 	@Column(name="status")
 	private boolean status;
+	
 	@Column(name = "created", columnDefinition = "timestamp default current_timestamp")
 	private Timestamp created;
+	
 	@Temporal(TemporalType.DATE)
 	@Column(name="updated")
 	private Date updated;
+	
 	public int getId() {
 		return id;
 	}

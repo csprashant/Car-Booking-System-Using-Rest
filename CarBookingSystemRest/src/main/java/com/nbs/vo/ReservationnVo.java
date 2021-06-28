@@ -1,11 +1,9 @@
 package com.nbs.vo;
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-
 public class ReservationnVo {
 	
 	private String id;

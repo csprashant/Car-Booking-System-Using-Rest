@@ -1,5 +1,4 @@
 package com.nbs.service;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,14 +18,13 @@ public class ReservationServiceImpl implements  IReservationService {
 	private ReservationRepository repository;
 	private UserRepository userRepository;
 	private VehicleRepository vehicleRepository;
-
+	
 	public ReservationServiceImpl(ReservationRepository repository, UserRepository userRepository,
 			VehicleRepository vehicleRepository) {
 		this.repository = repository;
 		this.userRepository = userRepository;
 		this.vehicleRepository = vehicleRepository;
 	}
-
 	public boolean bookReservation(ReservationnVo rvo) throws Exception {
 		Reservation reservation = new Reservation();
 		reservation.setFromDate(new SimpleDateFormat("yyyy-MM-dd").parse(rvo.getFromDate()));
@@ -45,12 +43,11 @@ public class ReservationServiceImpl implements  IReservationService {
 		try {
 			repository.save(reservation);
 			res = true;
-		} catch (Exception ee) {
+		}catch (Exception ee) {
 			ee.printStackTrace();
 			res = false;
 		}
 		return res;
-	
 }
 public List<ReservationnVo> fetchAllReservationDetails() {
 	List<Reservation> listReservation = (List<Reservation>)repository.findAll();

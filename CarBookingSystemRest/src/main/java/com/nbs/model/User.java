@@ -1,8 +1,6 @@
 package com.nbs.model;
-
 import java.sql.Timestamp;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,29 +10,34 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import javax.persistence.UniqueConstraint;
-import javax.persistence.UniqueConstraint;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 @Table(name="user" ,uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
 	@NotBlank(message = "* please enter name")
 	private String name;
+	
 	@NotBlank(message="* please enter emailid")
 	@Email(message = "* please enter valid email id")
+	
 	private String email;
 	@NotBlank(message = "* please enter password")
 	private String password;
-	private int type;//
+	
+	private int type;
 	@Column(name = "created", columnDefinition = "timestamp default current_timestamp")
 	private Timestamp created;
+	
 	@Temporal(TemporalType.DATE)
 	private Date updated;
+	
 	public User() {
 		super();
 	}
