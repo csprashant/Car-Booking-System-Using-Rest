@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.nbs.dto.UserDto;
 import com.nbs.dto.VehicleDto;
 import com.nbs.model.User;
 import com.nbs.model.Vehicle;
@@ -29,7 +27,7 @@ public class VehicleController {
 	HttpSession session = null;
 	ModelMapper mapper=new ModelMapper();
 	User user1 = null;
-	private final String msg = "you dont have  privilege for this page ";
+	private  String msg = "you dont have  privilege for this page ";
 	
 	/**
 	 * Performs insertion operation on VehicleDto class
@@ -41,7 +39,7 @@ public class VehicleController {
 	
 	@PostMapping("/vehicle")
 	public String addVehicle(@Valid @RequestBody  VehicleDto  vehicleDto, BindingResult result, HttpServletRequest request) {
-	Vehicle vehicle = new Vehicle();
+	var vehicle = new Vehicle();
 		if (valid(request)) {
 			if (!result.hasErrors()) {
 				mapper.map(vehicleDto,vehicle);
@@ -63,7 +61,7 @@ public class VehicleController {
 	public List<VehicleDto> getVehicles(HttpServletRequest request) {
 		 if (valid(request)) {
 			  List<Vehicle>  vehicle  =vehicleService.getAllVehicleInfo();
-			  List<VehicleDto> listdto=new ArrayList<VehicleDto>();
+			  List<VehicleDto> listdto=new ArrayList<>();
 			 VehicleDto dto;
 			 while(vehicle.iterator().hasNext()){ 
 				 dto=new VehicleDto();
@@ -86,7 +84,7 @@ public class VehicleController {
 	@PutMapping("/update-vehicle")
 	public String updateVehicle(@Valid @RequestBody VehicleDto vehicledto, HttpServletRequest request) {
 		if (valid(request)) {
-			Vehicle vehicle = new Vehicle();
+			var  vehicle = new Vehicle();
 			mapper.map(vehicledto, vehicle);
 			return vehicleService.updateVehicle(vehicle);
 		} else {
@@ -110,27 +108,6 @@ public class VehicleController {
 }
 	
 	public boolean valid(HttpServletRequest request) {
-		session = request.getSession(false);
-		User user1 = (User) session.getAttribute("user");
-		System.out.println(user1);
-		if (user1.getType() == 1)
-			return true;
-		else
-			return false;
-	}
-	
-	/**
-	 * method for handling custom exceptions
-	 * @return String
-	 */
-	
-	@ExceptionHandler(value =  RuntimeException.class)
-	public String customException(Exception e) {
-		return e.getMessage();
-	}
-	
-	@ExceptionHandler(value = NullPointerException.class)
-	public String customException1() {
-		return msg;
-	}
+		return ( (User)  request.getSession(false).getAttribute("user")).getType() ==1;
+	}	
 }

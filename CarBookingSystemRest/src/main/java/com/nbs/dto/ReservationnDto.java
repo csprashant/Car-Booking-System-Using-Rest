@@ -1,4 +1,6 @@
 package com.nbs.dto;
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReservationnDto {
+public class ReservationnDto  implements Serializable{
 	
 	private String id;
 	private String userId;

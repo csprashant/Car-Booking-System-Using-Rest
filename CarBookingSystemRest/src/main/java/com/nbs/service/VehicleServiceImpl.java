@@ -19,13 +19,10 @@ public class VehicleServiceImpl implements IVehicleService {
 	 */
 	
 	public String saveVehicle(Vehicle vehilce){
-		try{vehilce.setUpdated(new Timestamp(new Date().getTime()));
+		vehilce.setUpdated(new Timestamp(new Date().getTime()));
 		repository.save(vehilce);
-		return "Record saved ";}
-		catch(Exception e){
-			throw new RuntimeException("Internal problem");
+		return "Record saved ";
 		}
-	}
 
 	/**
 	 *  Returns all vehicle details
@@ -33,8 +30,7 @@ public class VehicleServiceImpl implements IVehicleService {
 	 */
 	
 	public List<Vehicle> getAllVehicleInfo() {
-		List<Vehicle> listVehicle=(List<Vehicle>)repository.findAll();
-		return listVehicle;	
+		return (List<Vehicle>)repository.findAll();
 	}
 	
 	/**
@@ -68,7 +64,7 @@ public class VehicleServiceImpl implements IVehicleService {
 		 */
 		
 		public String  updateVehicle(Vehicle vehicle) {
-			Vehicle existingVehicle=repository.findById(vehicle.getId()).get();
+			var existingVehicle=repository.findById(vehicle.getId()).get();
 			if(existingVehicle!=null) {
 				existingVehicle.setvName(vehicle.getvName());
 				existingVehicle.setvColor(vehicle.getvColor());

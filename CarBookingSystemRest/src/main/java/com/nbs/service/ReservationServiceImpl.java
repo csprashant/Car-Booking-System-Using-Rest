@@ -27,20 +27,20 @@ public class ReservationServiceImpl implements  IReservationService {
 		this.vehicleRepository = vehicleRepository;
 	}
 	public boolean bookReservation(ReservationnDto rvo) throws Exception {
-		Reservation reservation = new Reservation();
+		var reservation = new Reservation();
 		reservation.setFromDate(new SimpleDateFormat("yyyy-MM-dd").parse(rvo.getFromDate()));
 		reservation.setToDate(new SimpleDateFormat("yyyy-MM-dd").parse(rvo.getToDate()));
 		reservation.setUpdated(new Timestamp(new Date().getTime()));
 		reservation.setStatus(true);
 		// loading existing user
-		User user = userRepository.findById(Integer.valueOf(rvo.getUserId())).get();
+		var user = userRepository.findById(Integer.valueOf(rvo.getUserId())).get();
 		// loading existing VehicleDto
-		Vehicle vehicle = vehicleRepository.findById(Integer.valueOf(rvo.getVehicleId())).get();
+		var vehicle = vehicleRepository.findById(Integer.valueOf(rvo.getVehicleId())).get();
 		// adding user data to reservation
 		reservation.setUser(user);
 		// adding vehicle data to reservation
 		reservation.setVehicle(vehicle);
-		boolean res = false;
+		var res = false;
 		try {
 			repository.save(reservation);
 			res = true;
@@ -51,10 +51,11 @@ public class ReservationServiceImpl implements  IReservationService {
 		return res;
 }
 public List<ReservationnDto> fetchAllReservationDetails() {
+	int i;
 	List<Reservation> listReservation = (List<Reservation>)repository.findAll();
-	List<ReservationnDto> listVo = new ArrayList<ReservationnDto>();
-	for (int i = 0; i < listReservation.size(); i++) {
-		ReservationnDto reservationnvo = new ReservationnDto();
+	List<ReservationnDto> listVo = new ArrayList<>();
+	for ( i = 0; i < listReservation.size(); i++) {
+		var reservationnvo = new ReservationnDto();
 		reservationnvo.setId(listReservation.get(i).getId() + "");
 		reservationnvo.setUserId(listReservation.get(i).getUser().getId() + "");
 		reservationnvo.setUserName(listReservation.get(i).getUser().getName());

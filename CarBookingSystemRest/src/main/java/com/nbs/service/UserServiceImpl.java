@@ -35,8 +35,7 @@ public class UserServiceImpl implements IUserService {
 	 */
 	
 	public List<User> getAllUserInfo() {
-		List<User> listUser = (List<User>) repository.findAll();
-		return listUser;
+		return (List<User>) repository.findAll();
 	}
 	
 	/**
@@ -45,8 +44,7 @@ public class UserServiceImpl implements IUserService {
     */
 	
 	public User getUserInfo(Integer userId) {
-		User user = repository.findById(userId).get();
-		return user;
+		return  repository.findById(userId).get();
 	}
 
 	/**
@@ -54,9 +52,10 @@ public class UserServiceImpl implements IUserService {
 	*@param vehicleId  a Integer value represents userId
 	*/
 	
-	public String deleteUser(Integer userId) {
+	public void deleteUser(Integer userId) {
+		System.out.println(2);
 		repository.deleteById(userId);
-		return "Record deleted";
+		
 	}
 	
 	/**
@@ -71,7 +70,7 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	public String  updateUser(User user) {
-		User existingUser=repository.findById(user.getId()).get();
+		var existingUser=repository.findById(user.getId()).get();
 		if(existingUser!=null) {
 			existingUser.setName(user.getName());
 			existingUser.setEmail(user.getEmail());

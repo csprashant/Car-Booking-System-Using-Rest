@@ -20,7 +20,7 @@ public class ReservationController {
 	private IReservationService reservationService;
 	HttpSession session = null;
 	User user1 = null;
-	private final String msg = "you dont have  privilege for this page ";
+	private static final String msg = "you dont have  privilege for this page ";
 
 	/**
 	 * Display Reservation information 
@@ -49,13 +49,12 @@ public class ReservationController {
 			res = false;
 			try {
 				res = reservationService.bookReservation(reservationnDto);
-				res = true;
 				}
 			catch (Exception e) {
 				e.printStackTrace();
 				res = false;
 				}
-			if (res == true) 
+			if (res) 
 				return "Reservation created successfully";
 			else
 				return "Reservation Faild";
@@ -66,26 +65,6 @@ public class ReservationController {
 	
 	
 	public boolean valid(HttpServletRequest request) {
-		session = request.getSession(false);
-		User user1 = (User) session.getAttribute("user");
-		if (user1.getType() == 1)
-			return true;
-		else
-			return false;
-	}
-	
-	/**
-	 * method for handling custom exceptions
-	 * @return String
-	 */
-	
-	@ExceptionHandler(value =  RuntimeException.class)
-	public String customException(Exception e) {
-		return e.getMessage();
-	}
-	
-	@ExceptionHandler(value = NullPointerException.class)
-	public String customException1() {
-		return msg;
+		return ( (User)  request.getSession(false).getAttribute("user")).getType() ==1;
 	}
 }

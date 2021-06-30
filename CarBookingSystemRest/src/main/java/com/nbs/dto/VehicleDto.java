@@ -1,7 +1,9 @@
 package com.nbs.dto;
+import java.io.Serializable;
+
 import org.hibernate.validator.constraints.NotBlank;
 
-public class VehicleDto {
+public class VehicleDto implements Serializable {
 	private String id;
 	@NotBlank(message="*Make sure you have not entered Vehicle Name")
 	private String vName;

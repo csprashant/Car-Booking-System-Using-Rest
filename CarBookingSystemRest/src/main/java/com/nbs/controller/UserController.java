@@ -29,7 +29,7 @@ public class UserController {
 	HttpSession session = null;
 	ModelMapper mapper=new ModelMapper();
 	User user1 = null;
-	private final String msg = "you dont have  privilege for this page ";
+	private static  final String msg = "you dont have  privilege for this page ";
 	
 	/**
 	 * performs login operation
@@ -40,14 +40,14 @@ public class UserController {
 	 */
 	
 	@PostMapping("/login")
-	public String  handleLogin(@Valid @RequestBody UserDto userdto,BindingResult result, HttpServletRequest request) throws Exception {
-			User user=new User();
-			ModelMapper mapper=new ModelMapper();
+	public String  handleLogin(@Valid @RequestBody UserDto userdto,BindingResult result, HttpServletRequest request) {
+			var user=new User();
+			mapper=new ModelMapper();
 			mapper.map(userdto, user);
 			if(result.hasErrors()){ 
 			return result.getAllErrors().toString();
 		} else {
-			User user1 = userService.login(user.getEmail(), user.getPassword());
+			user1 = userService.login(user.getEmail(), user.getPassword());
 			if (user1 != null) {
 				session = request.getSession();
 				session.setAttribute("user", user1);
@@ -55,7 +55,8 @@ public class UserController {
 					return "Welcome "+user1.getName();}
 				else
 					return "Welcome "+user1.getName();
-				} else
+				} 
+			else
 				throw new RuntimeException("Invalid emailid and password");
 			}
 	}
@@ -71,15 +72,17 @@ public class UserController {
 	
 	@PostMapping("/user")
 	public String saveUser(@Valid @RequestBody UserDto userdto, BindingResult result, HttpServletRequest request) {
-		User user=new User();
+		var user=new User();
 		if(valid(request)){
 			if(!result.hasErrors()){
 				mapper.map(userdto, user);
 				userService.saveUser(user);
 				return "Data saved";
-				}else
+				}
+			else
 				return result.getAllErrors().toString();
-			}else
+			}
+		else
 			throw new RuntimeException(msg);
 		}
 
@@ -91,19 +94,18 @@ public class UserController {
 	
 	@GetMapping("/users")
 	public List<UserDto> showAllUser(HttpServletRequest request) {
-		
-		  if (valid(request)) {
-			  List<User> user=userService.getAllUserInfo();
-			  List<UserDto> listdto=new ArrayList<UserDto>();
-			 UserDto dto;
-			 while(user.iterator().hasNext()){ 
-				 dto=new UserDto();
-				 mapper.map(dto,user);
-				 listdto.add(dto); 
-			} 
-			 return listdto;
-			 } else 
-				 throw new RuntimeException(msg);	
+		  if (valid(request)) { 
+			 var  user=userService.getAllUserInfo();
+			  List<UserDto> listdto=new ArrayList<>();
+			  UserDto dto;
+			  while(user.iterator().hasNext()){
+				  dto=new UserDto();
+				  mapper.map(dto,user);
+				  listdto.add(dto);
+				  } 
+			  return listdto; }
+		  else
+			  throw new RuntimeException(msg);
 	}
 
 	/**
@@ -117,9 +119,9 @@ public class UserController {
 	public String updateUser(@RequestBody UserDto userdto, HttpServletRequest request) {
 		
 		if (valid(request)) {
-			User user=new User();
-			mapper.map(userdto, user);
-			return userService.updateUser(user);
+			user1=new User();
+			mapper.map(userdto, user1);
+			return userService.updateUser(user1);
 		}else {
 			throw new RuntimeException(msg);
 		}
@@ -133,15 +135,13 @@ public class UserController {
 	 */
 	
 	@DeleteMapping("/delete-user/{id}")
-	public String deleteUser(@PathVariable Integer id, HttpServletRequest request) {
+	public void deleteUser(@PathVariable Integer id, HttpServletRequest request) {
 		if (valid(request))
-			return userService.deleteUser(id);
-		else
-			throw new RuntimeException(msg);
+			userService.deleteUser(id);
 		}
 	
 	@GetMapping("/logout")
-	public String logout(HttpServletRequest request) throws Exception {
+	public String logout(HttpServletRequest request)  {
 		session = request.getSession(false);
 		session.invalidate();
 		return "logout Successflly";
@@ -154,26 +154,6 @@ public class UserController {
 	 */
 	
 	public boolean valid(HttpServletRequest request) {
-		session = request.getSession(false);
-		User user1 = (User) session.getAttribute("user");
-		if (user1.getType() == 1)
-			return true;
-		else
-			return false;
-	}
-	
-	/**
-	 * method for handling custom exceptions
-	 * @return String
-	 */
-	
-	@ExceptionHandler(value =  RuntimeException.class)
-	public String customException(Exception e) {
-		return e.getMessage();
-	}
-	
-	@ExceptionHandler(value = NullPointerException.class)
-	public String customException1() {
-		return msg;
+		return ( (User)  request.getSession(false).getAttribute("user")).getType() ==1;
 	}
 }
