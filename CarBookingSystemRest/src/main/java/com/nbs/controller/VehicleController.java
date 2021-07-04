@@ -1,33 +1,36 @@
 package com.nbs.controller;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.nbs.dto.VehicleDto;
-import com.nbs.model.User;
 import com.nbs.model.Vehicle;
 import com.nbs.service.IVehicleService;
 
 @RestController
+@RequestMapping("/vehicle")
 public class VehicleController {
 	@Autowired
 	private IVehicleService vehicleService;
-	HttpSession session = null;
+	
 	ModelMapper mapper=new ModelMapper();
-	User user1 = null;
-	private  String msg = "you dont have  privilege for this page ";
+
 	
 	/**
 	 * Performs insertion operation on VehicleDto class
@@ -37,29 +40,28 @@ public class VehicleController {
 	 * @return returns success message if the user saved
 	 */
 	
-	@PostMapping("/vehicle")
+	@PostMapping("/add-vehicle")
+	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String addVehicle(@Valid @RequestBody  VehicleDto  vehicleDto, BindingResult result, HttpServletRequest request) {
 	var vehicle = new Vehicle();
-		if (valid(request)) {
-			if (!result.hasErrors()) {
-				mapper.map(vehicleDto,vehicle);
-				vehicleService.saveVehicle(vehicle);
-				return "Data saved ";
-			} else
-				return result.getAllErrors().toString();
-		} else {
-			throw new RuntimeException(msg);
-		}
+	if (!result.hasErrors()) {
+	mapper.map(vehicleDto,vehicle);
+	vehicleService.saveVehicle(vehicle);
+	return "Data saved ";
 	}
+	else
+				return result.getAllErrors().toString();
+}
 
 	/**
 	 * Display all VehicleDto information
 	 * @return List<VehicleDto> contains vehicles information
 	 */
 	
-	@GetMapping("/vehicles")
+	@GetMapping("/display-all-vehicles")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')" )
 	public List<VehicleDto> getVehicles(HttpServletRequest request) {
-		 if (valid(request)) {
 			  List<Vehicle>  vehicle  =vehicleService.getAllVehicleInfo();
 			  List<VehicleDto> listdto=new ArrayList<>();
 			 VehicleDto dto;
@@ -69,9 +71,6 @@ public class VehicleController {
 				 listdto.add(dto); 
 			 }
 			 return listdto;
-			 }
-		 else 
-				 throw new RuntimeException(msg);	
 }
 	
 	/**
@@ -82,14 +81,12 @@ public class VehicleController {
 	 */
 	
 	@PutMapping("/update-vehicle")
+	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String updateVehicle(@Valid @RequestBody VehicleDto vehicledto, HttpServletRequest request) {
-		if (valid(request)) {
 			var  vehicle = new Vehicle();
 			mapper.map(vehicledto, vehicle);
-			return vehicleService.updateVehicle(vehicle);
-		} else {
-			throw new RuntimeException(msg);
-		}
+			return vehicleService.updateVehicle(vehicle);	
 	}
 	
 	/**
@@ -100,14 +97,11 @@ public class VehicleController {
 	 */
 	
 	@DeleteMapping("/delete-vehicle/{id}")
+	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String deleteVehicle(@PathVariable Integer id, HttpServletRequest request) {
-		if (valid(request)) {
 			return vehicleService.deleteVehicle(id);
-		} else
-			throw new RuntimeException(msg);
-}
 	
-	public boolean valid(HttpServletRequest request) {
-		return ( (User)  request.getSession(false).getAttribute("user")).getType() ==1;
-	}	
+}
+
 }

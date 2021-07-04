@@ -31,7 +31,7 @@ public class User {
 	@NotBlank(message = "* please enter password")
 	private String password;
 	
-	private int type;
+	private String type;
 	@Column(name = "created", columnDefinition = "timestamp default current_timestamp")
 	private Timestamp created;
 	
@@ -41,7 +41,7 @@ public class User {
 	public User() {
 		super();
 	}
-	public User(Integer id, String name, String email, String password, int type, Timestamp created, Date updated) {
+	public User(Integer id, String name, String email, String password,String type, Timestamp created, Date updated) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -75,10 +75,10 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getType() {
+	public String getType() {
 		return type;
 	}
-	public void setType(int type) {
+	public void setType(String  type) {
 		this.type = type;
 	}
 	public Timestamp getCreated() {

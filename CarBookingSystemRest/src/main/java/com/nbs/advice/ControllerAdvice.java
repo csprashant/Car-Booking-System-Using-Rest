@@ -21,7 +21,6 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(NoSuchElementException.class)
 	public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException nee){
-		System.out.println("Calling");
 		return new ResponseEntity<>("No value present in Database",HttpStatus.NOT_FOUND);
 		}
 	@Override

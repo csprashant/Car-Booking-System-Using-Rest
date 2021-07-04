@@ -24,7 +24,7 @@ public class UserServiceImpl implements IUserService {
 	 */
 	
 	public User saveUser(User user) {
-		user.setType(2);
+		user.setType("ROLE_USER");
 		user.setUpdated(new Timestamp(new Date().getTime()));
 		return repository.save(user);
 	}
