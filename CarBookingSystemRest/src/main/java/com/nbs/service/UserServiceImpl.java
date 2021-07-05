@@ -53,7 +53,6 @@ public class UserServiceImpl implements IUserService {
 	*/
 	
 	public void deleteUser(Integer userId) {
-		System.out.println(2);
 		repository.deleteById(userId);
 		
 	}

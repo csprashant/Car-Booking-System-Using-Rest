@@ -31,6 +31,12 @@ public class Vehicle {
 	@Temporal(TemporalType.DATE)
 	private Date updated;
 	
+	public Vehicle(String vName, String vColor, String vNumber) {
+		super();
+		this.vName = vName;
+		this.vColor = vColor;
+		this.vNumber = vNumber;
+	}
 	public Vehicle() {
 		 super();
 		}

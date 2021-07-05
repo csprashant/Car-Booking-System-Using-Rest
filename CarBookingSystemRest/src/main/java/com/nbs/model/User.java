@@ -51,6 +51,12 @@ public class User {
 		this.created = created;
 		this.updated = updated;
 	}
+	public User(String name, String email, String password) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.password = password;
+	}
 	public Integer getId() {
 		return id;
 	}

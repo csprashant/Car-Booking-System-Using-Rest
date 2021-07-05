@@ -3,7 +3,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
 import com.nbs.model.Vehicle;
 import com.nbs.repository.VehicleRepository;
 @Service
@@ -18,10 +20,10 @@ public class VehicleServiceImpl implements IVehicleService {
 	 *@param vehilce  VehicleDto class object 
 	 */
 	
-	public String saveVehicle(Vehicle vehilce){
+	public Vehicle saveVehicle(Vehicle vehilce){
 		vehilce.setUpdated(new Timestamp(new Date().getTime()));
-		repository.save(vehilce);
-		return "Record saved ";
+		return repository.save(vehilce);
+	
 		}
 
 	/**
@@ -48,14 +50,9 @@ public class VehicleServiceImpl implements IVehicleService {
 		*@param vehicleId  a Integer value represents vehicleId 
 	 */
 	
-		public String  deleteVehicle(Integer vehicleId)
-	{	Vehicle v=repository.findById(vehicleId).get();
-	if(v!=null) {
+		public void  deleteVehicle(Integer vehicleId)
+	{	
 			repository.deleteById(vehicleId);
-			return "Record deleted";
-	}
-	else
-		return "Record not found";
 	}
 		/**
 		 * 

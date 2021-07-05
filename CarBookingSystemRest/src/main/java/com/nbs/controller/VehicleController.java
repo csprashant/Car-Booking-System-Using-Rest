@@ -99,9 +99,9 @@ public class VehicleController {
 	@DeleteMapping("/delete-vehicle/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String deleteVehicle(@PathVariable Integer id, HttpServletRequest request) {
-			return vehicleService.deleteVehicle(id);
-	
+	public String  deleteVehicle(@PathVariable Integer id, HttpServletRequest request) {
+			 vehicleService.deleteVehicle(id);
+			 return "Deleted";
 }
 
 }

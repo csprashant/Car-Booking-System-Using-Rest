@@ -108,8 +108,9 @@ public class UserController {
 	@DeleteMapping("/delete-user/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public void deleteUser(@PathVariable Integer id, HttpServletRequest request) {
+	public String  deleteUser(@PathVariable Integer id, HttpServletRequest request) {
 		userService.deleteUser(id);
+		return "Deleted";
 	}
 	
 }
