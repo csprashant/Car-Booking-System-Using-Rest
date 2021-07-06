@@ -31,7 +31,7 @@ public class ReservationController {
 	@GetMapping("/display-all-reservations")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public List<ReservationnDto> mapperListReservatinHistory(HttpServletRequest request) {
+	public List<ReservationnDto> mapperListReservatinHistory() {
 	return reservationService.fetchAllReservationDetails();
 	}
 	/**

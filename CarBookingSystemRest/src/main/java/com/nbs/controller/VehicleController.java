@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nbs.convertor.VehicleConvertor;
 import com.nbs.dto.VehicleDto;
 import com.nbs.model.Vehicle;
 import com.nbs.service.IVehicleService;
@@ -43,11 +44,9 @@ public class VehicleController {
 	@PostMapping("/add-vehicle")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String addVehicle(@Valid @RequestBody  VehicleDto  vehicleDto, BindingResult result, HttpServletRequest request) {
-	var vehicle = new Vehicle();
+	public String addVehicle(@Valid @RequestBody  VehicleDto  vehicleDto, BindingResult result) {
 	if (!result.hasErrors()) {
-	mapper.map(vehicleDto,vehicle);
-	vehicleService.saveVehicle(vehicle);
+	vehicleService.saveVehicle(new VehicleConvertor().dtoToEntity(vehicleDto));
 	return "Data saved ";
 	}
 	else
@@ -61,16 +60,8 @@ public class VehicleController {
 	
 	@GetMapping("/display-all-vehicles")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')" )
-	public List<VehicleDto> getVehicles(HttpServletRequest request) {
-			  List<Vehicle>  vehicle  =vehicleService.getAllVehicleInfo();
-			  List<VehicleDto> listdto=new ArrayList<>();
-			 VehicleDto dto;
-			 while(vehicle.iterator().hasNext()){ 
-				 dto=new VehicleDto();
-				 mapper.map(dto,vehicle);
-				 listdto.add(dto); 
-			 }
-			 return listdto;
+	public List<VehicleDto> getVehicles() {
+		return new VehicleConvertor().entityToDto(vehicleService.getAllVehicleInfo());
 }
 	
 	/**
@@ -84,9 +75,7 @@ public class VehicleController {
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public Vehicle updateVehicle(@PathVariable Integer id,@Valid @RequestBody VehicleDto vehicledto) {
-			var  vehicle = new Vehicle();
-			mapper.map(vehicledto, vehicle);
-			return vehicleService.updateVehicle(id,vehicle);	
+			return vehicleService.updateVehicle(id,new VehicleConvertor().dtoToEntity(vehicledto));	
 	}
 	
 	/**
@@ -99,7 +88,7 @@ public class VehicleController {
 	@DeleteMapping("/delete-vehicle/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String  deleteVehicle(@PathVariable Integer id, HttpServletRequest request) {
+	public String  deleteVehicle(@PathVariable Integer id) {
 			 vehicleService.deleteVehicle(id);
 			 return "Deleted";
 }

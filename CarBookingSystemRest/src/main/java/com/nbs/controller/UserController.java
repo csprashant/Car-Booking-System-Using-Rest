@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nbs.convertor.UserConvertor;
 import com.nbs.dto.UserDto;
 import com.nbs.model.User;
 import com.nbs.service.IUserService;
@@ -66,16 +67,8 @@ public class UserController {
 	@GetMapping("/display-all-users")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public List<UserDto> showAllUser(HttpServletRequest request) {
-		var user = userService.getAllUserInfo();
-		List<UserDto> listdto = new ArrayList<>();
-		UserDto dto;
-		while (user.iterator().hasNext()) {
-			dto = new UserDto();
-			mapper.map(dto, user);
-			listdto.add(dto);
-		}
-		return listdto;
+	public List<UserDto> showAllUser() {
+		return new UserConvertor().entityToDto(userService.getAllUserInfo());
 	}
 
 	/**
@@ -91,10 +84,7 @@ public class UserController {
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public User updateUser(@PathVariable Integer id,@RequestBody UserDto userdto) {
-		var user1 = new User();
-		System.out.println(userdto.getPassword());
-		mapper.map(userdto, user1);
-	System.out.println("yeha");
+		var user1 = new UserConvertor().dtoToEntity(userdto);
 		user1.setPassword( passwordEncoder.encode(userdto.getPassword()));
 		return userService.updateUser(id,user1);
 	}

@@ -35,7 +35,7 @@ public class UserServiceImpl implements IUserService {
 	 */
 	
 	public List<User> getAllUserInfo() {
-		return (List<User>) repository.findAll();
+		return  repository.findAll();
 	}
 	
 	/**
