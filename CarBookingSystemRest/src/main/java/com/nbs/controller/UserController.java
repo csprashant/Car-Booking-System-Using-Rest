@@ -87,14 +87,16 @@ public class UserController {
 	 * @return return success message if the record updated .
 	 */
 	
-	@PutMapping("/update-user")
+	@PutMapping("/update-user/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String updateUser(@RequestBody UserDto userdto, HttpServletRequest request) {
+	public User updateUser(@PathVariable Integer id,@RequestBody UserDto userdto) {
 		var user1 = new User();
+		System.out.println(userdto.getPassword());
 		mapper.map(userdto, user1);
-		user1.setPassword( passwordEncoder.encode(user1.getPassword()));
-		return userService.updateUser(user1);
+	System.out.println("yeha");
+		user1.setPassword( passwordEncoder.encode(userdto.getPassword()));
+		return userService.updateUser(id,user1);
 	}
 
 	/**
@@ -108,7 +110,7 @@ public class UserController {
 	@DeleteMapping("/delete-user/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String  deleteUser(@PathVariable Integer id, HttpServletRequest request) {
+	public String  deleteUser(@PathVariable Integer id) {
 		userService.deleteUser(id);
 		return "Deleted";
 	}

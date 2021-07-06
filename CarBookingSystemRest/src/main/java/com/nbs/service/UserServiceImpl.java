@@ -68,16 +68,11 @@ public class UserServiceImpl implements IUserService {
 		return repository.findByEmailAndPassword(emailId, password);
 	}
 	
-	public String  updateUser(User user) {
-		var existingUser=repository.findById(user.getId()).get();
-		if(existingUser!=null) {
+	public User  updateUser(Integer id,User user) {
+			var existingUser=repository.findById(id).get();
 			existingUser.setName(user.getName());
 			existingUser.setEmail(user.getEmail());
 			existingUser.setPassword(user.getPassword());
-			repository.save(existingUser);
-			return "Record updated";
-		}
-		else
-			return "record not found";
-		}
+			return repository.save(existingUser);
+	}
 }

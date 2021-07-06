@@ -80,13 +80,13 @@ public class VehicleController {
 	 * @return returns success message if the vehicle information updated.
 	 */
 	
-	@PutMapping("/update-vehicle")
+	@PutMapping("/update-vehicle/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String updateVehicle(@Valid @RequestBody VehicleDto vehicledto, HttpServletRequest request) {
+	public Vehicle updateVehicle(@PathVariable Integer id,@Valid @RequestBody VehicleDto vehicledto) {
 			var  vehicle = new Vehicle();
 			mapper.map(vehicledto, vehicle);
-			return vehicleService.updateVehicle(vehicle);	
+			return vehicleService.updateVehicle(id,vehicle);	
 	}
 	
 	/**

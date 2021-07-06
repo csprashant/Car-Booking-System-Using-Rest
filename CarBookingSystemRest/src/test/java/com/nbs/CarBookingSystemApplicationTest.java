@@ -89,14 +89,10 @@ public class CarBookingSystemApplicationTest {
 		  when(vehicleRepository.save(vehicle)).thenReturn(vehicle);
 		  assertEquals(vehicle ,iVehicleService.saveVehicle(vehicle));
 		  }
-	/*  @Test
-	  public void updateUserTest() {
-		User user=userRepository.findById(101).get();
-		user.setName("Ajay");
-		userRepository.save(user);
-		assertNotEquals("Ajay",userRepository.findById(101).get().getName());
-		
-		  }*/
+
+			/*
+			 * @Test public void updateUserTest() { User user= }
+			 */
 	  @Test
 		public void deleteUserTest() {
 			iUserService.deleteUser(1589);

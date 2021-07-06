@@ -60,16 +60,12 @@ public class VehicleServiceImpl implements IVehicleService {
 		 * @return vehicle class updated object
 		 */
 		
-		public String  updateVehicle(Vehicle vehicle) {
-			var existingVehicle=repository.findById(vehicle.getId()).get();
-			if(existingVehicle!=null) {
+		public Vehicle  updateVehicle(Integer id,Vehicle vehicle) {
+			var existingVehicle=repository.findById(id).get();
 				existingVehicle.setvName(vehicle.getvName());
 				existingVehicle.setvColor(vehicle.getvColor());
 				existingVehicle.setvNumber(vehicle.getvNumber());
-				repository.save(existingVehicle);
-				return "Record updated successfully";
-			}
-			else
-				return "Record not found";
+				return repository.save(existingVehicle);
+			
 		}
 }
