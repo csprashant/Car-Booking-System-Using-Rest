@@ -6,10 +6,9 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+import com.nbs.convertor.ReservationConvertor;
 import com.nbs.dto.ReservationnDto;
 import com.nbs.model.Reservation;
-import com.nbs.model.User;
-import com.nbs.model.Vehicle;
 import com.nbs.repository.ReservationRepository;
 import com.nbs.repository.UserRepository;
 import com.nbs.repository.VehicleRepository;
@@ -26,16 +25,12 @@ public class ReservationServiceImpl implements  IReservationService {
 		this.userRepository = userRepository;
 		this.vehicleRepository = vehicleRepository;
 	}
-	public boolean bookReservation(ReservationnDto rvo) throws Exception {
-		var reservation = new Reservation();
-		reservation.setFromDate(new SimpleDateFormat("yyyy-MM-dd").parse(rvo.getFromDate()));
-		reservation.setToDate(new SimpleDateFormat("yyyy-MM-dd").parse(rvo.getToDate()));
-		reservation.setUpdated(new Timestamp(new Date().getTime()));
-		reservation.setStatus(true);
+	public boolean bookReservation(ReservationnDto reservationDto) {
+		var reservation = new ReservationConvertor().dtoToEntity(reservationDto);
 		// loading existing user
-		var user = userRepository.findById(Integer.valueOf(rvo.getUserId())).get();
+		var user = userRepository.findById(Integer.valueOf(reservationDto.getUserId())).get();
 		// loading existing VehicleDto
-		var vehicle = vehicleRepository.findById(Integer.valueOf(rvo.getVehicleId())).get();
+		var vehicle = vehicleRepository.findById(Integer.valueOf(reservationDto.getVehicleId())).get();
 		// adding user data to reservation
 		reservation.setUser(user);
 		// adding vehicle data to reservation
@@ -51,24 +46,7 @@ public class ReservationServiceImpl implements  IReservationService {
 		return res;
 }
 public List<ReservationnDto> fetchAllReservationDetails() {
-	int i;
 	List<Reservation> listReservation = (List<Reservation>)repository.findAll();
-	List<ReservationnDto> listVo = new ArrayList<>();
-	for ( i = 0; i < listReservation.size(); i++) {
-		var reservationnvo = new ReservationnDto();
-		reservationnvo.setId(listReservation.get(i).getId() + "");
-		reservationnvo.setUserId(listReservation.get(i).getUser().getId() + "");
-		reservationnvo.setUserName(listReservation.get(i).getUser().getName());
-		reservationnvo.setVehicleId(listReservation.get(i).getVehicle().getId()+ "");
-		reservationnvo.setVName(listReservation.get(i).getVehicle().getvName());
-		reservationnvo.setVNumber(listReservation.get(i).getVehicle().getvNumber());
-		reservationnvo.setFromDate((listReservation.get(i).getFromDate() + "").substring(0, 10));
-		reservationnvo.setToDate((listReservation.get(i).getToDate() + "").substring(0, 10));
-		reservationnvo.setStatus(listReservation.get(i).isStatus() + "");
-		reservationnvo.setUpdated(listReservation.get(i).getUpdated() + "");
-		reservationnvo.setCreated(listReservation.get(i).getCreated() + "");
-		listVo.add(reservationnvo);
-	}
-	return listVo;
+	return  new ReservationConvertor().entityToDto(listReservation);
 }
 }

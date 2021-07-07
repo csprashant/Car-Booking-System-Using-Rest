@@ -1,10 +1,7 @@
 package com.nbs.controller;
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.nbs.convertor.UserConvertor;
 import com.nbs.dto.UserDto;
 import com.nbs.model.User;
@@ -46,7 +42,7 @@ public class UserController {
 	 */
 
 	@PostMapping("/add-user")
-	public String saveUser(@Valid @RequestBody UserDto userdto, BindingResult result, HttpServletRequest request) {
+	public String saveUser(@Valid @RequestBody UserDto userdto, BindingResult result) {
 		var user = new User();
 		if (!result.hasErrors()) {
 			mapper.map(userdto, user);

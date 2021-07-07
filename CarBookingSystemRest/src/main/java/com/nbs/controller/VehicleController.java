@@ -1,10 +1,8 @@
 package com.nbs.controller;
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.nbs.convertor.VehicleConvertor;
 import com.nbs.dto.VehicleDto;
 import com.nbs.model.Vehicle;
@@ -29,68 +26,70 @@ import com.nbs.service.IVehicleService;
 public class VehicleController {
 	@Autowired
 	private IVehicleService vehicleService;
-	
-	ModelMapper mapper=new ModelMapper();
+	ModelMapper mapper = new ModelMapper();
 
-	
 	/**
 	 * Performs insertion operation on VehicleDto class
-	 * @param vehicle {@link VehicleDto} class object must provide value for vehicle name, color and for vehicle number
+	 * 
+	 * @param vehicle {@link VehicleDto} class object must provide value for vehicle
+	 *                name, color and for vehicle number
 	 * @param result  {@link BindingResult}
 	 * @param request {@link HttpServletRequest}
 	 * @return returns success message if the user saved
 	 */
-	
+
 	@PostMapping("/add-vehicle")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String addVehicle(@Valid @RequestBody  VehicleDto  vehicleDto, BindingResult result) {
-	if (!result.hasErrors()) {
-	vehicleService.saveVehicle(new VehicleConvertor().dtoToEntity(vehicleDto));
-	return "Data saved ";
+	public String addVehicle(@Valid @RequestBody VehicleDto vehicleDto, BindingResult result) {
+		if (!result.hasErrors()) {
+			vehicleService.saveVehicle(new VehicleConvertor().dtoToEntity(vehicleDto));
+			return "Data saved ";
+		} else
+			return result.getAllErrors().toString();
 	}
-	else
-				return result.getAllErrors().toString();
-}
 
 	/**
 	 * Display all VehicleDto information
+	 * 
 	 * @return List<VehicleDto> contains vehicles information
 	 */
-	
+
 	@GetMapping("/display-all-vehicles")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')" )
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
 	public List<VehicleDto> getVehicles() {
 		return new VehicleConvertor().entityToDto(vehicleService.getAllVehicleInfo());
-}
-	
+	}
+
 	/**
 	 * Performs update operation on VehicleDto class
-	 * @param vehicle {@link VehicleDto} class must provide value for id ,and the information which you want to change
+	 * 
+	 * @param vehicle {@link VehicleDto} class must provide value for id ,and the
+	 *                information which you want to change
 	 * @param request {@link HttpServletRequest}
 	 * @return returns success message if the vehicle information updated.
 	 */
-	
+
 	@PutMapping("/update-vehicle/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public Vehicle updateVehicle(@PathVariable Integer id,@Valid @RequestBody VehicleDto vehicledto) {
-			return vehicleService.updateVehicle(id,new VehicleConvertor().dtoToEntity(vehicledto));	
+	public Vehicle updateVehicle(@PathVariable Integer id, @Valid @RequestBody VehicleDto vehicledto) {
+		return vehicleService.updateVehicle(id, new VehicleConvertor().dtoToEntity(vehicledto));
 	}
-	
+
 	/**
-	 * Performs Deletion on vehicles 
+	 * Performs Deletion on vehicles
 	 * @param id      vehicle id which you want to delete
 	 * @param request {@link HttpServletRequest}
 	 * @return return success message if the record deleted
 	 */
-	
+
 	@DeleteMapping("/delete-vehicle/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String  deleteVehicle(@PathVariable Integer id) {
-			 vehicleService.deleteVehicle(id);
-			 return "Deleted";
-}
+	public String deleteVehicle(@PathVariable Integer id) {
+		vehicleService.deleteVehicle(id);
+		return "Deleted";
+	}
 
 }

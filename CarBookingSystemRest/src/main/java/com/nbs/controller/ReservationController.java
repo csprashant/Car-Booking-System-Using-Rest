@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nbs.convertor.ReservationConvertor;
 import com.nbs.dto.ReservationnDto;
 import com.nbs.service.IReservationService;
 
@@ -21,19 +22,7 @@ import com.nbs.service.IReservationService;
 public class ReservationController {
 	@Autowired
 	private IReservationService reservationService;
-
-	/**
-	 * Display Reservation information 
-	 * @param request {@link HttpServletRequest}
-	 * @return information about all reservations
-	 */
 	
-	@GetMapping("/display-all-reservations")
-	@Secured("ROLE_ADMIN")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public List<ReservationnDto> mapperListReservatinHistory() {
-	return reservationService.fetchAllReservationDetails();
-	}
 	/**
 	 * Method to create reservation 
 	 * @param reservationnDto Must provide value for userID,vehiclId,fromDate,todate
@@ -44,8 +33,7 @@ public class ReservationController {
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
 	public String handlerCreateReservation(@RequestBody ReservationnDto reservationnDto) throws Exception {
 		boolean res;
-		if (new SimpleDateFormat("yyyy-MM-dd").parse(reservationnDto.getFromDate())
-				.compareTo(new SimpleDateFormat("yyyy-MM-dd").parse(reservationnDto.getToDate())) < 0) {
+		if (new ReservationConvertor().valid(reservationnDto.getFromDate(), reservationnDto.getToDate())) {
 			res = false;
 			try {
 				res = reservationService.bookReservation(reservationnDto);
@@ -61,5 +49,17 @@ public class ReservationController {
 			}
 		else
 			return "from date must be before to date";
+	}
+	/**
+	 * Display Reservation information 
+	 * @param request {@link HttpServletRequest}
+	 * @return information about all reservations
+	 */
+	
+	@GetMapping("/display-all-reservations")
+	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public List<ReservationnDto> mapperListReservatinHistory() {
+	return reservationService.fetchAllReservationDetails();
 	}
 }
