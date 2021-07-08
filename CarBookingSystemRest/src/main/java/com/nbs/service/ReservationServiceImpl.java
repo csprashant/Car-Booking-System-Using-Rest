@@ -1,17 +1,18 @@
 package com.nbs.service;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
-
 import com.nbs.convertor.ReservationConvertor;
 import com.nbs.dto.ReservationnDto;
+import com.nbs.exception.UserNotFoundException;
+import com.nbs.exception.VehicleNotFoundException;
 import com.nbs.model.Reservation;
+import com.nbs.model.User;
+import com.nbs.model.Vehicle;
 import com.nbs.repository.ReservationRepository;
 import com.nbs.repository.UserRepository;
 import com.nbs.repository.VehicleRepository;
+
 
 @Service
 public class ReservationServiceImpl implements  IReservationService {
@@ -25,23 +26,29 @@ public class ReservationServiceImpl implements  IReservationService {
 		this.userRepository = userRepository;
 		this.vehicleRepository = vehicleRepository;
 	}
-	public boolean bookReservation(ReservationnDto reservationDto) {
+	public String bookReservation(ReservationnDto reservationDto) {
 		var reservation = new ReservationConvertor().dtoToEntity(reservationDto);
 		// loading existing user
-		var user = userRepository.findById(Integer.valueOf(reservationDto.getUserId())).get();
+		Optional<User> user = userRepository.findById(Integer.valueOf(reservationDto.getUserId()));
 		// loading existing VehicleDto
-		var vehicle = vehicleRepository.findById(Integer.valueOf(reservationDto.getVehicleId())).get();
+		Optional<Vehicle> vehicle = vehicleRepository.findById(Integer.valueOf(reservationDto.getVehicleId()));
 		// adding user data to reservation
-		reservation.setUser(user);
+		if(user.isPresent())
+			reservation.setUser(user.get());
+		else 
+			throw new UserNotFoundException("");
 		// adding vehicle data to reservation
-		reservation.setVehicle(vehicle);
-		var res = false;
+		if(vehicle.isPresent())
+			reservation.setVehicle(vehicle.get());
+		else
+			throw new VehicleNotFoundException("");
+		var res = "";
 		try {
 			repository.save(reservation);
-			res = true;
+			return "Reservation created";
 		}catch (Exception ee) {
 			ee.printStackTrace();
-			res = false;
+			res = "Reservation faild";
 		}
 		return res;
 }

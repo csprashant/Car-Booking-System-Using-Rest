@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.nbs.convertor.UserConvertor;
 import com.nbs.convertor.VehicleConvertor;
+import com.nbs.dto.UserDto;
 import com.nbs.dto.VehicleDto;
 import com.nbs.model.Vehicle;
 import com.nbs.service.IVehicleService;
@@ -55,10 +58,23 @@ public class VehicleController {
 	 * @return List<VehicleDto> contains vehicles information
 	 */
 
-	@GetMapping("/display-all-vehicles")
+	@GetMapping("/vehicles")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
 	public List<VehicleDto> getVehicles() {
 		return new VehicleConvertor().entityToDto(vehicleService.getAllVehicleInfo());
+	}
+
+	/**
+	 * Display a vehicles by id
+	 * 
+	 * @param id Integer type represents vehicle id
+	 * @return {@link VehicleDto}
+	 */
+	@GetMapping("/{id}")
+	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public VehicleDto getUser(@PathVariable Integer id) {
+		return new VehicleConvertor().entityToDto(vehicleService.getVehicleInfo(id));
 	}
 
 	/**
@@ -73,12 +89,17 @@ public class VehicleController {
 	@PutMapping("/update-vehicle/{id}")
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public Vehicle updateVehicle(@PathVariable Integer id, @Valid @RequestBody VehicleDto vehicledto) {
-		return vehicleService.updateVehicle(id, new VehicleConvertor().dtoToEntity(vehicledto));
+	public String updateVehicle(@PathVariable Integer id, @Valid @RequestBody VehicleDto vehicledto,
+			BindingResult result) {
+		if (!result.hasErrors())
+			return vehicleService.updateVehicle(id, new VehicleConvertor().dtoToEntity(vehicledto));
+		else
+			return result.getAllErrors().toString();
 	}
 
 	/**
 	 * Performs Deletion on vehicles
+	 * 
 	 * @param id      vehicle id which you want to delete
 	 * @param request {@link HttpServletRequest}
 	 * @return return success message if the record deleted
@@ -88,8 +109,7 @@ public class VehicleController {
 	@Secured("ROLE_ADMIN")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String deleteVehicle(@PathVariable Integer id) {
-		vehicleService.deleteVehicle(id);
-		return "Deleted";
+		return vehicleService.deleteVehicle(id);
 	}
 
 }

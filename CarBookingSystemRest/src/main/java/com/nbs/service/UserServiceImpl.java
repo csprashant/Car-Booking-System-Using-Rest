@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.nbs.exception.UserNotFoundException;
 import com.nbs.model.User;
 import com.nbs.repository.UserRepository;
 
@@ -44,7 +45,11 @@ public class UserServiceImpl implements IUserService {
     */
 	
 	public User getUserInfo(Integer userId) {
-		return  repository.findById(userId).get();
+		  Optional<User> user = repository.findById(userId);
+		  if(user.isPresent())
+			  return user.get();
+		  else
+			  throw new UserNotFoundException("");
 	}
 
 	/**
@@ -52,8 +57,13 @@ public class UserServiceImpl implements IUserService {
 	*@param vehicleId  a Integer value represents userId
 	*/
 	
-	public void deleteUser(Integer userId) {
-		repository.deleteById(userId);
+	public String deleteUser(Integer userId) {
+  Optional<User> user = repository.findById(userId);
+		if(user.isPresent()) {
+			repository.deleteById(userId);
+			return "Deleted";}
+		else
+			throw new UserNotFoundException("User not found");
 		
 	}
 	
@@ -69,10 +79,14 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	public User  updateUser(Integer id,User user) {
-			var existingUser=repository.findById(id).get();
-			existingUser.setName(user.getName());
-			existingUser.setEmail(user.getEmail());
-			existingUser.setPassword(user.getPassword());
-			return repository.save(existingUser);
+			Optional<User> existingUser = repository.findById(id);
+			if(existingUser.isPresent()) {
+			existingUser.get().setName(user.getName());
+			existingUser.get().setEmail(user.getEmail());
+			existingUser.get().setPassword(user.getPassword());
+			return repository.save(existingUser.get());
+			}
+			else
+				throw new UserNotFoundException("User not found");
 	}
 }

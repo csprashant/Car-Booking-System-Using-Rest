@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
+import com.nbs.exception.VehicleNotFoundException;
 import com.nbs.model.Vehicle;
 import com.nbs.repository.VehicleRepository;
 @Service
@@ -41,8 +41,11 @@ public class VehicleServiceImpl implements IVehicleService {
 	 */
 	
 	public Vehicle getVehicleInfo(Integer vehicleId)
-	{	Optional<Vehicle> vehicle = repository.findById(vehicleId);
-		return vehicle.get();
+	{	Optional<Vehicle> vehicle =  repository.findById(vehicleId);
+		if (vehicle.isPresent())
+			return vehicle.get();
+		else
+			throw new VehicleNotFoundException("");
 	}
 	
 	/**
@@ -50,9 +53,13 @@ public class VehicleServiceImpl implements IVehicleService {
 		*@param vehicleId  a Integer value represents vehicleId 
 	 */
 	
-		public void  deleteVehicle(Integer vehicleId)
-	{	
-			repository.deleteById(vehicleId);
+		public String  deleteVehicle(Integer vehicleId){
+			Optional<Vehicle> vehicle = repository.findById(vehicleId);
+			if(vehicle.isPresent()) {
+				repository.deleteById(vehicleId);
+				return " Record Deleted";}
+			else
+				throw new VehicleNotFoundException("Vehicle  not found");
 	}
 		/**
 		 * 
@@ -60,12 +67,15 @@ public class VehicleServiceImpl implements IVehicleService {
 		 * @return vehicle class updated object
 		 */
 		
-		public Vehicle  updateVehicle(Integer id,Vehicle vehicle) {
-			var existingVehicle=repository.findById(id).get();
-				existingVehicle.setvName(vehicle.getvName());
-				existingVehicle.setvColor(vehicle.getvColor());
-				existingVehicle.setvNumber(vehicle.getvNumber());
-				return repository.save(existingVehicle);
-			
+		public String  updateVehicle(Integer id,Vehicle vehicle) {
+				Optional<Vehicle>existingVehicle=repository.findById(id);
+				if(existingVehicle.isPresent()) {
+					existingVehicle.get().setvName(vehicle.getvName());
+					existingVehicle.get().setvColor(vehicle.getvColor());
+					existingVehicle.get().setvNumber(vehicle.getvNumber());
+					repository.save(existingVehicle.get());
+					return "Record updated";
+				}else
+					throw new VehicleNotFoundException("Vehicle not found");			
 		}
 }

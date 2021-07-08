@@ -8,7 +8,7 @@ public interface IVehicleService {
 	public Vehicle saveVehicle(Vehicle vehilce);
 	public List<Vehicle> getAllVehicleInfo();
 	public Vehicle getVehicleInfo(Integer vehicleId);
-	public void  deleteVehicle(Integer vehicleId);
-	public Vehicle  updateVehicle(Integer id, Vehicle vehicle);
+	public String  deleteVehicle(Integer vehicleId);
+	public String  updateVehicle(Integer id, Vehicle vehicle);
 
 }
